@@ -1,0 +1,16 @@
+.mainContainer {
+  display: flex;
+  align-items: center;
+}
+
+.smMargin {
+  margin: 8px; /* Assuming theme.spacing(1) is equivalent to 8px */
+}
+
+.actionDiv {
+  text-align: center;
+}
+
+.container :hover {
+  box-shadow: 2px 2px 13px 0px rgba(148, 148, 148, 1);
+}
