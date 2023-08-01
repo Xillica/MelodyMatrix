@@ -8,7 +8,6 @@ import { createPost, updatePost } from "../../actions/posts";
 
 const Form = ({ currentId, setCurrentId }) => {
   const [postData, setPostData] = useState({
-    creator: "",
     title: "",
     artist: "",
     key: "",
@@ -21,6 +20,8 @@ const Form = ({ currentId, setCurrentId }) => {
 
   const dispatch = useDispatch();
 
+  const user = JSON.parse(localStorage.getItem("profile"));
+
   useEffect(() => {
     if (post) setPostData(post);
   }, [post]);
@@ -29,15 +30,26 @@ const Form = ({ currentId, setCurrentId }) => {
     e.preventDefault();
 
     if (currentId) {
-      dispatch(updatePost(currentId, postData));
-    } else dispatch(createPost(postData));
+      dispatch(
+        updatePost(currentId, { ...postData, name: user?.result?.name })
+      );
+    } else dispatch(createPost({ ...postData, name: user?.result?.name }));
     clear();
   };
+
+  if (!user?.result?.name) {
+    return (
+      <Paper className="paper">
+        <Typography variant="h6" align="center">
+          Sign in free to access the full functionalities.
+        </Typography>
+      </Paper>
+    );
+  }
 
   const clear = () => {
     setCurrentId(null);
     setPostData({
-      creator: "",
       title: "",
       artist: "",
       key: "",
@@ -56,17 +68,6 @@ const Form = ({ currentId, setCurrentId }) => {
         <Typography variant="h6">
           {currentId ? "Edit the Heading" : "Contribute a Song"}
         </Typography>
-        <TextField
-          sx={{ my: 0.5 }}
-          name="creator"
-          variant="outlined"
-          label="Creator"
-          fullWidth
-          value={postData.creator}
-          onChange={(e) =>
-            setPostData({ ...postData, creator: e.target.value })
-          }
-        />
         <TextField
           sx={{ my: 0.5 }}
           name="title"

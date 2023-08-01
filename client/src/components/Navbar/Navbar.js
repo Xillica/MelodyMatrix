@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 
-import {
-  useLocation,
-  Link,
-} from "react-router-dom-v5-compat";
+import { useLocation, Link } from "react-router-dom-v5-compat";
 
-import {useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
+
+import decode from "jwt-decode";
 
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -35,13 +34,18 @@ const Navbar = () => {
     setUser(null);
   };
 
-  // useEffect(() => {
-  //   const token = user?.token;
+  useEffect(() => {
+    const token = user?.token;
 
-  //   //JWT
+    //   //jwt
+    if (token) {
+      const decodedToken = decode(token);
 
-  //   setUser(JSON.parse(localStorage.getItem("profile")));
-  // }, [location]);
+      if(decodedToken.exp * 1000 < new Date().getTime()) logout();
+    }
+
+    setUser(JSON.parse(localStorage.getItem("profile")));
+  }, [location]);
 
   return (
     <AppBar

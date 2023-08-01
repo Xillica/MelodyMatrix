@@ -18,12 +18,23 @@ import { useHistory } from "react-router-dom";
 import Icon from "./icon";
 import { useDispatch } from "react-redux";
 
+import { signup, signin } from "../../actions/auth";
+
+const initialState = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  password: "",
+  confirmPassword: "",
+};
+
 function Auth() {
   const history = useHistory();
 
   const dispatch = useDispatch();
   const [ShowPassword, setShowPassword] = useState(false);
   const [isSignup, setIsSignup] = useState(false);
+  const [formData, setFormData] = useState(initialState);
 
   const handleShowPassword = () =>
     setShowPassword((prevShowPassword) => !prevShowPassword);
@@ -33,8 +44,19 @@ function Auth() {
     setShowPassword(false);
   };
 
-  const handleSubmit = () => {};
-  const handleChange = () => {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (isSignup) {
+      dispatch(signup(formData, history));
+    } else {
+      dispatch(signin(formData, history));
+    }
+  };
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const googleSuccess = async (res) => {
     // console.log(res);
@@ -73,8 +95,8 @@ function Auth() {
                   half
                 />
                 <Input
-                  name="firstName"
-                  label="First Name"
+                  name="lastName"
+                  label="Last Name"
                   handleChange={handleChange}
                   half
                 />
@@ -106,7 +128,7 @@ function Auth() {
             type="submit"
             fullWidth
             variant="contained"
-            color="primary"
+            color="success"
             className="submit"
             style={{ marginTop: "30px", marginBottom: "15px" }}
           >
