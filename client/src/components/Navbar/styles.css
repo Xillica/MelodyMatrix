@@ -1,3 +1,14 @@
 .topic {
-    text-decoration: none;
+  text-decoration: none;
+}
+
+.profile {
+  display: flex;
+  position: absolute;
+  right: 30px;
+  margin: 12px;
+}
+
+.userName {
+  color:black;
 }

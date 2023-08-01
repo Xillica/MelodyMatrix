@@ -10,6 +10,7 @@ import {
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import DeleteIcon from "@mui/icons-material/Delete";
 import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
+import ThumbUpAltOutlined from "@mui/icons-material/ThumbUpAltOutlined";
 import moment from "moment";
 
 import { useDispatch } from "react-redux";
@@ -20,6 +21,36 @@ import "./styles.css";
 
 const Post = ({ post, setCurrentId }) => {
   const dispatch = useDispatch();
+
+  const user = JSON.parse(localStorage.getItem("profile"));
+
+  const Likes = () => {
+    if (post.likes.length > 0) {
+      return post.likes.find(
+        (like) => like === (user?.result?.googleId || user?.result?._id)
+      ) ? (
+        <>
+          <ThumbUpIcon fontSize="small" />
+          &nbsp;
+          {post.likes.length > 2
+            ? `You and ${post.likes.length - 1} others`
+            : `${post.likes.length} like${post.likes.length > 1 ? "s" : ""}`}
+        </>
+      ) : (
+        <>
+          <ThumbUpAltOutlined fontSize="small" />
+          &nbsp;{post.likes.length} {post.likes.length === 1 ? "Like" : "Likes"}
+        </>
+      );
+    }
+
+    return (
+      <>
+        <ThumbUpAltOutlined fontSize="small" />
+        &nbsp;Like
+      </>
+    );
+  };
 
   return (
     <Card className="card">
@@ -39,19 +70,21 @@ const Post = ({ post, setCurrentId }) => {
           {moment(post.createdAt).fromNow()}
         </Typography>
       </div>
-
-      <div className="overlay2">
-        <Button
-          style={{ color: "white" }}
-          size="small"
-          onClick={() => setCurrentId(post._id)}
-        >
-          <MoreHorizIcon fontSize="medium" />
-        </Button>
-      </div>
+      {(user?.result?.googleId === post?.creator ||
+        user?.result?._id === post?.creator) && (
+        <div className="overlay2">
+          <Button
+            style={{ color: "white" }}
+            size="small"
+            onClick={() => setCurrentId(post._id)}
+          >
+            <MoreHorizIcon fontSize="medium" />
+          </Button>
+        </div>
+      )}
       <CardContent>
         <Typography className="title" variant="h5" gutterBottom>
-          Notation by : {post.creator}
+          Notation by : {post.name}
         </Typography>
       </CardContent>
       <div className="details">
@@ -63,19 +96,21 @@ const Post = ({ post, setCurrentId }) => {
         <Button
           size="small"
           color="primary"
+          disabled={!user?.result}
           onClick={() => dispatch(likePost(post._id))}
         >
-          <ThumbUpIcon fontSize="small" />
-          &nbsp; &nbsp;
-          {post.likeCount}
+          <Likes />
         </Button>
-        <Button
-          size="small"
-          color="primary"
-          onClick={() => dispatch(deletePost(post._id))}
-        >
-          <DeleteIcon fontSize="small" /> DELETE
-        </Button>
+        {(user?.result?.googleId === post?.creator ||
+          user?.result?._id === post?.creator) && (
+          <Button
+            size="small"
+            color="primary"
+            onClick={() => dispatch(deletePost(post._id))}
+          >
+            <DeleteIcon fontSize="small" /> DELETE
+          </Button>
+        )}
       </CardActions>
     </Card>
   );
