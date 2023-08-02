@@ -10,5 +10,13 @@
 }
 
 .userName {
-  color:black;
+  color: black;
+}
+
+.appBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; /* Make sure the navbar is above other elements */
 }

@@ -1,11 +1,7 @@
-import React, { useState, useEffect } from "react";
-
+import React, { useState, useEffect, useCallback } from "react";
 import { useLocation, Link } from "react-router-dom-v5-compat";
-
 import { useHistory } from "react-router-dom";
-
 import decode from "jwt-decode";
-
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Avatar from "@mui/material/Avatar";
@@ -15,7 +11,6 @@ import Typography from "@mui/material/Typography";
 import MenuIcon from "@mui/icons-material/Menu";
 import { grey } from "@mui/material/colors";
 import { useDispatch } from "react-redux";
-
 import "./styles.css";
 
 const Navbar = () => {
@@ -27,31 +22,31 @@ const Navbar = () => {
 
   console.log(user);
 
-  const logout = () => {
+  const logout = useCallback(() => {
     dispatch({ type: "LOGOUT" });
 
     history.push("/");
     setUser(null);
-  };
+  }, [dispatch, history]);
 
   useEffect(() => {
     const token = user?.token;
 
-    //   //jwt
+    //jwt
     if (token) {
       const decodedToken = decode(token);
 
-      if(decodedToken.exp * 1000 < new Date().getTime()) logout();
+      if (decodedToken.exp * 1000 < new Date().getTime()) logout();
     }
 
     setUser(JSON.parse(localStorage.getItem("profile")));
-  }, [location]);
+  }, [location, logout, user?.token]);
 
   return (
     <AppBar
       className="appBar"
       position="static"
-      style={{ backgroundColor: grey[100] }}
+      style={{ backgroundColor: grey[100], boxShadow: "none" }}
     >
       <Toolbar>
         <IconButton
@@ -90,14 +85,19 @@ const Navbar = () => {
           <Button
             className="logout"
             variant="contained"
-            color="secondary"
             onClick={logout}
+            sx={{ color: grey[800], backgroundColor: grey[300] }} // Set gray color here
           >
             Logout
           </Button>
         </div>
       ) : (
-        <Button component={Link} to="/auth" variant="contained" color="primary">
+        <Button
+          component={Link}
+          to="/auth"
+          variant="contained"
+          sx={{ color: grey[100], backgroundColor: grey[600] }} // Set gray color here
+        >
           Sign In
         </Button>
       )}
