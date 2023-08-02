@@ -6,7 +6,6 @@ import {
   Grid,
   Typography,
   Container,
-  TextField,
 } from "@mui/material";
 
 import { GoogleLogin } from "react-google-login";
@@ -77,7 +76,7 @@ function Auth() {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container className="paper1" component="main" maxWidth="xs">
       <Paper className="paper" elevation={3}>
         <Avatar className="avatar">
           <LockOutlinedIcon />
