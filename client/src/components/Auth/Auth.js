@@ -8,7 +8,7 @@ import {
   Container,
 } from "@mui/material";
 
-import { GoogleLogin } from "react-google-login";
+// import { GoogleLogin } from "react-google-login";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import "./Auth.css";
 import Input from "./Input";
@@ -134,7 +134,7 @@ function Auth() {
             {isSignup ? "Sign Up" : "Sign in"}
           </Button>
 
-          <GoogleLogin
+          {/* <GoogleLogin
             clientId="687297844715-ejnffadrvv1u41k6unn57sri3jvahake.apps.googleusercontent.com"
             render={(renderProps) => (
               <Button
@@ -152,7 +152,7 @@ function Auth() {
             onSuccess={googleSuccess}
             onFailure={googleFailure}
             cookiePolicy="single_host_origin"
-          />
+          /> */}
           <Grid container justifyContent="flex-end">
             <Button onClick={switchMode}>
               {isSignup
