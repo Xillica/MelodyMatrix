@@ -6,6 +6,8 @@
   display: flex;
   position: absolute;
   right: 30px;
+  gap: 30px;
+  align-items: center;
   margin: 12px;
 }
 
